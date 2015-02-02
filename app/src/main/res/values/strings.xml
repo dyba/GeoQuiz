@@ -18,5 +18,10 @@
     <string name="prev_btn_description">Previous Button</string>
     <string name="next_btn_description">Next Button</string>
     <string name="action_settings">Settings</string>
+    <string name="cheat_button">Cheat!</string>
+    <string name="warning_text">Are you sure you want to do this?</string>
+    <string name="show_answer_button">Show Answer</string>
+    <string name="judgment_toast">Cheating is wrong.</string>
+    <string name="title_activity_cheat">CheatActivity</string>
 
 </resources>
