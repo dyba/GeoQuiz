@@ -12,11 +12,44 @@ import android.widget.TextView;
 public class CheatActivity extends ActionBarActivity {
 
     private boolean mAnswerIsTrue;
+    private boolean mIsAnswerShown;
     private TextView mAnswerTextView;
     private Button mShowAnswer;
 
     public static final String EXTRA_ANSWER_IS_TRUE = "com.danieldyba.geoquiz.answer_is_true";
     public static final String EXTRA_ANSWER_SHOWN = "com.danieldyba.geoquiz.answer_shown";
+
+    private static final String KEY_CHEATER = "cheater";
+    private static final String KEY_ANSWER_IS_TRUE = "answer_is_true";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_cheat);
+
+        mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
+        mAnswerTextView = (TextView)findViewById(R.id.answerTextView);
+
+        if (savedInstanceState != null) {
+            mIsAnswerShown = savedInstanceState.getBoolean(KEY_CHEATER, false);
+            mAnswerIsTrue = savedInstanceState.getBoolean(KEY_ANSWER_IS_TRUE, mAnswerIsTrue);
+            setAnswerShownResult(mIsAnswerShown);
+        }
+
+        if (mIsAnswerShown) {
+            setAnswerText(mAnswerIsTrue);
+        }
+
+        mShowAnswer = (Button)findViewById(R.id.showAnswerButton);
+        mShowAnswer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setAnswerText(mAnswerIsTrue);
+                mIsAnswerShown = true;
+                setAnswerShownResult(mIsAnswerShown);
+            }
+        });
+    }
 
     private void setAnswerShownResult(boolean isAnswerShown) {
         Intent data = new Intent();
@@ -24,30 +57,14 @@ public class CheatActivity extends ActionBarActivity {
         setResult(RESULT_OK, data);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cheat);
-        mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
-
-        mAnswerTextView = (TextView)findViewById(R.id.answerTextView);
-
-        // Default to the answer not being shown
-        setAnswerShownResult(false);
-
-        mShowAnswer = (Button)findViewById(R.id.showAnswerButton);
-        mShowAnswer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mAnswerIsTrue) {
-                    mAnswerTextView.setText(R.string.true_button);
-                } else {
-                    mAnswerTextView.setText(R.string.false_button);
-                }
-                setAnswerShownResult(true);
-            }
-        });
+    private void setAnswerText(boolean answerIsTrue) {
+        if (answerIsTrue) {
+            mAnswerTextView.setText(R.string.true_button);
+        } else {
+            mAnswerTextView.setText(R.string.false_button);
+        }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -66,5 +83,12 @@ public class CheatActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putBoolean(KEY_CHEATER, mIsAnswerShown);
+        savedInstanceState.putBoolean(KEY_ANSWER_IS_TRUE, mAnswerIsTrue);
     }
 }
