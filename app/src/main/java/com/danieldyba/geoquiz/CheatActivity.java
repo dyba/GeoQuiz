@@ -13,11 +13,13 @@ public class CheatActivity extends ActionBarActivity {
 
     private boolean mAnswerIsTrue;
     private boolean mIsAnswerShown;
+    private int mQuestionIndex;
     private TextView mAnswerTextView;
     private Button mShowAnswer;
 
     public static final String EXTRA_ANSWER_IS_TRUE = "com.danieldyba.geoquiz.answer_is_true";
     public static final String EXTRA_ANSWER_SHOWN = "com.danieldyba.geoquiz.answer_shown";
+    public static final String EXTRA_QUESTION_INDEX = "com.danieldyba.geoquiz.question_index";
 
     private static final String KEY_CHEATER = "cheater";
     private static final String KEY_ANSWER_IS_TRUE = "answer_is_true";
@@ -28,6 +30,7 @@ public class CheatActivity extends ActionBarActivity {
         setContentView(R.layout.activity_cheat);
 
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
+        mQuestionIndex = getIntent().getIntExtra(EXTRA_QUESTION_INDEX, -1);
         mAnswerTextView = (TextView)findViewById(R.id.answerTextView);
 
         if (savedInstanceState != null) {
@@ -54,6 +57,7 @@ public class CheatActivity extends ActionBarActivity {
     private void setAnswerShownResult(boolean isAnswerShown) {
         Intent data = new Intent();
         data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
+        data.putExtra(EXTRA_QUESTION_INDEX, mQuestionIndex);
         setResult(RESULT_OK, data);
     }
 
